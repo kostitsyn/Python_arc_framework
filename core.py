@@ -44,22 +44,25 @@ class Application:
             requests['data'] = data
             # print(f'Полученные данные: {data}')
 
-        check_html = len(re.findall(r'html.*', path))
-        if check_html:
-            check_slash = len(re.findall(r'/$', path))
-            if check_slash:
-                result = re.match(r'^.+l', path)
-                path = result.group(0)
-            if path.count('html') >= 2:
-                path = path.split('/')
-                path = ['/', path[-1]]
-                path = ''.join(path)
-        else:
-            check_slash = len(re.findall(r'/$', path))
-            if not check_slash:
-                path = path.split()
-                path.append('/')
-                path = ''.join(path)
+        # check_html = len(re.findall(r'html.*', path))
+        # if check_html:
+        #     check_slash = len(re.findall(r'/$', path))
+        #     if check_slash:
+        #         result = re.match(r'^.+l', path)
+        #         path = result.group(0)
+        #     if path.count('html') >= 2:
+        #         path = path.split('/')
+        #         path = ['/', path[-1]]
+        #         path = ''.join(path)
+        # else:
+        #     check_slash = len(re.findall(r'/$', path))
+        #     if not check_slash:
+        #         path = path.split()
+        #         path.append('/')
+        #         path = ''.join(path)
+
+        if not path.endswith('/'):
+            path = path + '/'
 
         for front_view in self.fronts:
             front_view(requests)

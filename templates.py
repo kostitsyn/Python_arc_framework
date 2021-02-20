@@ -1,4 +1,5 @@
-from jinja2 import Template
+from jinja2 import Template, FileSystemLoader
+from jinja2.environment import Environment
 
 
 def render(template_name, **kwargs):
@@ -8,7 +9,10 @@ def render(template_name, **kwargs):
     :param kwargs:
     :return:
     """
-    with open(f'templates/{template_name}', encoding='utf-8') as f:
-        template = Template(f.read())
+    # with open(f'templates/{template_name}', encoding='utf-8') as f:
+    #     template = Template(f.read())
+    # return template.render(**kwargs)
+    env = Environment()
+    env.loader = FileSystemLoader('templates')
+    template = env.get_template(template_name)
     return template.render(**kwargs)
-
