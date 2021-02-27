@@ -4,7 +4,7 @@ import urllib
 
 from wsgiref.util import setup_testing_defaults
 sys.path.append('../')
-
+# from views import main_view
 
 # Front controllers
 def set_key(request):
@@ -26,13 +26,14 @@ class Application:
         self.fronts = fronts
 
     def __call__(self, environ, start_response):
+        # print(f'Словарь урлов: {self.routes}')
         setup_testing_defaults(environ)
         path = environ['PATH_INFO']
-        print(environ)
+        # print(environ)
         requests = {}
 
         request_type = environ['REQUEST_METHOD']
-        print(f'Тип запроса: {request_type}')
+        # print(f'Тип запроса: {request_type}')
         requests['method'] = request_type
 
         # Если тип запроса POST
@@ -98,6 +99,23 @@ class Application:
         data = {key: value[0] for key, value in data.items()}
         return data
 
+
+class DebugApplication(Application):
+    def __init__(self, routes, fronts):
+        self.application = Application(routes, fronts)
+        super().__init__(routes, fronts)
+
+    def __call__(self, environ, start_response):
+        print('/\/\/\/\/\/\/\/\/\/\/\/\/\Режим ОТЛАДКИ/\/\/\/\/\/\/\/\/\/\/\/\/\\')
+        print(f'Тип запроса: {environ["REQUEST_METHOD"]}\nЕго параметры: {environ}')
+        return super().__call__(environ, start_response)
+
+
+class FakeApplication(Application):
+    def __call__(self, environ, start_response):
+        code, text_response = '200 OK', '<h1>Hello from Fake</h1>'
+        start_response(code, [('Content-Type', 'text-html')])
+        return [text_response.encode('utf-8')]
 
 
 
