@@ -61,6 +61,17 @@ class Application:
         start_response(code, [('Content-Type', 'text/html')])
         return [text_response.encode('utf-8')]
 
+    def set_url(self, url):
+        """
+        Функция-декоратор, добавляющая новую пару путь: словарь.
+        :param url:
+        :return:
+        """
+
+        def wrapper(func):
+            self.routes[url] = func
+
+        return wrapper
 
     def get_post_data(self, environ: dict) -> dict:
         """
